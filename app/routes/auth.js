@@ -4,8 +4,19 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
+const User = require('./../models/User');
+const EmailVerificationTokens = require('./../models/EmailVerificationToken');
+
+const confirmationEmailSender = require('./../util/email_verification/sender');
+const verifyRecaptcha = require('./../util/auth/verify-recaptcha');
+
 const config = require('./../config');
 
+/**
+ * POST /auth/login
+ *
+ * Logs a user in and sends them a JWT.
+ */
 router.post('/login', (req, res) => {
   const { email, password } = req.body;
 
@@ -38,8 +49,6 @@ router.post('/login', (req, res) => {
         });
       }
 
-      console.log(`Error: ${err}`);
-
       // If there is some other generic issue, return a 400 error and a generic
       // error message.
       return res.status(400).json({
@@ -49,13 +58,13 @@ router.post('/login', (req, res) => {
       });
     }
 
-    // if (!user.isEmailVerified) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     error: 'unverified-email',
-    //     message: 'Please verify your email address before logging in.',
-    //   });
-    // }
+    if (!user.is_email_verified) {
+      return res.status(400).json({
+        success: false,
+        error: 'unverified-email',
+        message: 'Please verify your email address before logging in.',
+      });
+    }
 
     // Let's create a JWT token now.
     const payload = {
@@ -69,11 +78,15 @@ router.post('/login', (req, res) => {
       success: true,
       message: 'You have successfully logged in.',
       token,
-      user,
     });
   })(req, res);
 });
 
+/**
+ * POST /auth/signup
+ *
+ * Creates a user account and sends a confirmation email.
+ */
 router.post('/signup', (req, res, next) => {
   const { email, password } = req.body;
 
@@ -102,25 +115,154 @@ router.post('/signup', (req, res, next) => {
     });
   }
 
-  // Now, let's try our passport local signup strategy.
-  return passport.authenticate('register', (err) => {
-    // TODO: Fix the user already exists logic.
-    if (err) {
-      console.log(`Error: ${err}`);
-
-      return res.status(409).json({
-        success: false,
-        error: 'user-already-exists',
-        message: 'A user with this email address already exists.',
-      });
-    }
-
-    // Alert the user that the account has successfully been created.
-    return res.status(200).json({
-      success: true,
-      message: 'You have successfully created an account.',
+  if (config.recaptcha.enabled && !req.body['g-recaptcha-response']) {
+    return res.status(400).json({
+      success: false,
+      error: 'invalid-recaptcha',
+      message: 'The reCAPTCHA verification failed, please try again.',
     });
-  })(req, res, next);
+  }
+
+  return verifyRecaptcha(req.body['g-recaptcha-response'].trim(),
+    (recaptchaSuccess) => {
+      if (!recaptchaSuccess) {
+        return res.status(400).json({
+          success: false,
+          error: 'invalid-recaptcha',
+          message: 'The reCAPTCHA verification failed, please try again.',
+        });
+      }
+
+      // Now, let's try our passport local signup strategy.
+      return passport.authenticate('register', (err, user) => {
+        // TODO: Fix the user already exists logic.
+        if (err) {
+          return res.status(409).json({
+            success: false,
+            error: 'user-already-exists',
+            message: 'A user with this email address already exists.',
+          });
+        }
+
+        // Start the email-confirmation process.
+        // FIXME: There is 100% a bug with this, but I can't figure out
+        // what it is.
+        return confirmationEmailSender(user).then(() => res.status(200).json({
+          success: true,
+          message: 'You have successfully created an account.',
+        }));
+      })(req, res, next);
+    });
+});
+
+
+/**
+ * POST /auth/verify
+ *
+ * Confirms a user's email using the token they received.
+ */
+router.post('/verify', (req, res) => {
+  const { email, confirmationId } = req.body;
+
+  return User.query().findOne('email', email.trim())
+    .then((user) => {
+      // Check whether this user exists in the first place.
+      if (!user) {
+        return res.status(400).json({
+          success: false,
+          error: 'invalid-email-confirmation',
+          message: 'Your email has not been verified.',
+        });
+      }
+
+      // Now, let's check whether the user is verified or not.
+      if (user.is_email_verified) {
+        return res.status(400).json({
+          success: false,
+          error: 'invalid-email-confirmation',
+          message: 'Your email has already been verified!',
+        });
+      }
+
+      // Since the user exists, try to find a valid verification token matching
+      // the data that was sent.
+      return EmailVerificationTokens.query().findOne({
+        user_id: user.id,
+        token: confirmationId.trim(),
+      })
+        .then((token) => {
+          if (!token) {
+            return res.status(400).json({
+              success: false,
+              error: 'invalid-email-confirmation',
+              message: 'Your email has not been verified.',
+            });
+          }
+
+          // Now, let's verify the user.
+          return user.$query().patch({ is_email_verified: true })
+            .then(() => {
+              // After we modified the user, let's delete the token and send
+              // the user a success status.
+              token.$query().then(() => res.status(200).json({
+                success: true,
+                message: 'Your email has been successfully verified.',
+              }));
+            });
+        });
+    });
+});
+
+
+/**
+ * POST /auth/resend
+ *
+ * Requests a confirmation email to be sent again.
+ */
+router.post('/resend', (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({
+      success: false,
+      error: 'no-email',
+      message: 'You must provide an email address.',
+    });
+  }
+
+  User.query().findOne('email', email.trim())
+    .then((user) => {
+      if (!user) {
+        return res.status(400).json({
+          success: false,
+          error: 'non-existent-email',
+          message: 'An account with this email address does not exist, try signing up first.',
+        });
+      }
+
+      if (user.is_email_verified) {
+        return res.status(400).json({
+          success: false,
+          error: 'email-already-verified',
+          message: 'This email has already been verified.',
+        });
+      }
+
+      return confirmationEmailSender(user).then((error) => {
+        if (error && error.name === 'email-verification-too-quickly') {
+          return res.status(400).json({
+            success: false,
+            error: 'email-verification-too-quickly',
+            message: 'You have already requested an email verification recently.',
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          message: 'Another confirmation email has been successfully sent.',
+        });
+      });
+    });
 });
 
 module.exports = router;

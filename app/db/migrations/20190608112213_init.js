@@ -23,7 +23,6 @@ exports.up = knex => knex.schema
     // Store information about access
     table.boolean('is_admin').defaultTo(false);
     table.boolean('is_email_verified').defaultTo(false);
-
   })
   .createTable('profiles', (table) => {
     // Profiles stores more information about the user that is unrelated to

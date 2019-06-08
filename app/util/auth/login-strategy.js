@@ -24,7 +24,7 @@ module.exports = new PassportLocalStrategy({
         return done(error);
       }
 
-      return bcrypt.compare(password, user.password)
+      return bcrypt.compare(password, user.getPassword())
         .then((passwordValid) => {
           if (!passwordValid) {
             const error = new Error('Incorrect email or password.');

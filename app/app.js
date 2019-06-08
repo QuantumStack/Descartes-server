@@ -12,7 +12,11 @@ const { Model } = require('objection');
 
 const knexConfig = require('./db/knexfile');
 
-Model.knex(Knex(knexConfig.development));
+if (config.app.node_env === 'production') {
+  Model.knex(Knex(knexConfig.production));
+} else {
+  Model.knex(Knex(knexConfig.development));
+}
 
 
 const indexRouter = require('./routes/index');
@@ -40,6 +44,8 @@ passport.use('register', signupStrategy);
 passport.use('login', loginStrategy);
 passport.use('jwt', jwtStrategy);
 
+// Initialize settings
+require('./util/init')();
 
 // Register routers
 app.use('/', indexRouter);

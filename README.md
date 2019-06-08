@@ -1,6 +1,6 @@
 # Descartes Server
 
-Go RESTful backend for Descartes.
+Express RESTful backend for Descartes.
 
 
 <div align="right"><sup>
