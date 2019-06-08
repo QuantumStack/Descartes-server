@@ -401,10 +401,6 @@ Get details about a user's courses.
 + Response 200 (application/json; charset=utf-8)
 
         {
-            "user": {
-                "name": "Aditya Pillai",
-                "email": "aditya@example.com"
-            },
             "instructorCourses": [
                 {
                     "id": "379",
@@ -455,10 +451,6 @@ Get all details about a course from a student's perspective. Notes:
 + Response 200 (application/json; charset=utf-8)
 
         {
-            "user": {
-                "name": "Aditya Pillai",
-                "email": "aditya@example.com"
-            },
             "course": {
                 "id": "761",
                 "name": "15-122: Fall 2019",
@@ -608,7 +600,8 @@ Get just the details about a user.
 
         {
             "user": {
-                "name": "Aditya Pillai",
+                "firstName": "Aditya",
+                "lastName": "Pillai",
                 "email": "aditya@example.com"
             },
             "payments": [
