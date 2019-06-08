@@ -12,6 +12,7 @@ Express RESTful backend for Descartes.
 Go to `./app/config.js` and fill in the following.
 
 ```js
+
 const config = {
 
   // Application Settings
@@ -44,7 +45,29 @@ const config = {
     },
   },
 
+  // Recaptcha Settings
+  recaptcha: {
+    secret: 'secretive',
+    enabled: true,
+  },
+
+  // Emailing Settings
+  email: {
+    smtp_server: 'smtp.host.org',
+    smtp_port: '587',
+    smtp_user: 'user@email.com',
+    smtp_password: 'secret passwords!!',
+  },
+
+  // Verification Token Settings
+  email_verification_token: {
+    expiry_time: 3600, // in seconds == 1 hour
+    delay_time: 3600, // in seconds == 1 hour
+  },
+
 };
 
+
 module.exports = config;
+
 ```
