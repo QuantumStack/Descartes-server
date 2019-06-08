@@ -1,6 +1,6 @@
 # Descartes Server
 
-Go RESTful backend for Descartes.
+Express RESTful backend for Descartes.
 
 
 <div align="right"><sup>
@@ -9,22 +9,42 @@ Go RESTful backend for Descartes.
 
 ## Configuration
 
-Go to `./config/config.json`.
+Go to `./app/config.js` and fill in the following.
 
-1. Set `GO_ENV` to either `dev` or `production` depending on the deployment. 
-2. Fill in the database credentials `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`, `DB_PORT`, and `DB_HOST`.
+```js
+const config = {
 
-Now, we need to run the app.
+  // Application Settings
+  app: {
+    node_env: 'dev',
+    port: 3000,
+  },
 
-```sh
-$ go run application.go
-   ____    __
-  / __/___/ /  ___
- / _// __/ _ \/ _ \
-/___/\__/_//_/\___/ v3.3.10-dev
-High performance, minimalist Go web framework
-https://echo.labstack.com
-____________________________________O/_______
-                                    O\
-⇨ http server started on [::]:1323
+  // Authentication Settings, keep care of this.
+  auth: {
+    secret: 'secret_goes_here',
+    salt_rounds: 12,
+  },
+
+  // Database Settings
+  db: {
+    development: {
+      host: 'localhost',
+      port: 5432,
+      name: 'descartes',
+      user: 'adityapillai',
+      pass: null,
+    },
+    production: {
+      host: 'localhost',
+      port: 5432,
+      name: 'descartes',
+      user: 'adityapillai',
+      pass: null,
+    },
+  },
+
+};
+
+module.exports = config;
 ```
