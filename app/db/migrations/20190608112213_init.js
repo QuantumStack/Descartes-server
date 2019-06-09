@@ -2,7 +2,7 @@
 exports.up = knex => knex.schema
   .createTable('users', (table) => {
     // General ID for the User
-    table.increments('id');
+    table.bigIncrements('id');
 
     // Identifies time information about this user
     table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable();
@@ -25,6 +25,7 @@ exports.up = knex => knex.schema
     table.boolean('is_email_verified').defaultTo(false);
   })
   .createTable('profiles', (table) => {
+    table.increments('id');
     // Profiles stores more information about the user that is unrelated to
     // authentication.
     table.integer('user_id').unsigned();

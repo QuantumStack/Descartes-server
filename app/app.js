@@ -12,6 +12,10 @@ const { Model } = require('objection');
 
 const knexConfig = require('./db/knexfile');
 
+
+// Import overall configuration
+const config = require('./config');
+
 if (config.app.node_env === 'production') {
   Model.knex(Knex(knexConfig.production));
 } else {

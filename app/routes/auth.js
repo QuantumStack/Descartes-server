@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 const User = require('./../models/User');
+const Profile = require('./../models/Profile');
 const EmailVerificationTokens = require('./../models/EmailVerificationToken');
 
 const confirmationEmailSender = require('./../util/email_verification/sender');
@@ -88,7 +89,9 @@ router.post('/login', (req, res) => {
  * Creates a user account and sends a confirmation email.
  */
 router.post('/signup', (req, res, next) => {
-  const { email, password } = req.body;
+  const {
+    email, password, firstName, lastName,
+  } = req.body;
 
   // If a field is missing, alert the user.
   if (!email) {
@@ -115,6 +118,16 @@ router.post('/signup', (req, res, next) => {
     });
   }
 
+  if (!firstName || !lastName) {
+    return res.status(400).json({
+      success: false,
+      error: 'no-name',
+      message: 'Please provide both your first and last name.',
+    });
+  }
+
+  const recaptchaResponse = req.body['g-recaptcha-response'] || '';
+
   if (config.recaptcha.enabled && !req.body['g-recaptcha-response']) {
     return res.status(400).json({
       success: false,
@@ -123,7 +136,7 @@ router.post('/signup', (req, res, next) => {
     });
   }
 
-  return verifyRecaptcha(req.body['g-recaptcha-response'].trim(),
+  return verifyRecaptcha(recaptchaResponse.trim(),
     (recaptchaSuccess) => {
       if (!recaptchaSuccess) {
         return res.status(400).json({
@@ -137,6 +150,7 @@ router.post('/signup', (req, res, next) => {
       return passport.authenticate('register', (err, user) => {
         // TODO: Fix the user already exists logic.
         if (err) {
+          console.log(err);
           return res.status(409).json({
             success: false,
             error: 'user-already-exists',
@@ -144,13 +158,16 @@ router.post('/signup', (req, res, next) => {
           });
         }
 
-        // Start the email-confirmation process.
-        // FIXME: There is 100% a bug with this, but I can't figure out
-        // what it is.
-        return confirmationEmailSender(user).then(() => res.status(200).json({
-          success: true,
-          message: 'You have successfully created an account.',
-        }));
+        // Let's now create the user's profile
+        user.$relatedQuery('profile').insert({
+          first_name: firstName,
+          last_name: lastName,
+        })
+          .then(() => confirmationEmailSender(user)
+            .finally(() => res.status(200).json({
+              success: true,
+              message: 'You have successfully created an account.',
+            })));
       })(req, res, next);
     });
 });
@@ -204,10 +221,11 @@ router.post('/verify', (req, res) => {
             .then(() => {
               // After we modified the user, let's delete the token and send
               // the user a success status.
-              token.$query().then(() => res.status(200).json({
-                success: true,
-                message: 'Your email has been successfully verified.',
-              }));
+              token.$query().delete()
+                .then(() => res.status(200).json({
+                  success: true,
+                  message: 'Your email has been successfully verified.',
+                }));
             });
         });
     });
