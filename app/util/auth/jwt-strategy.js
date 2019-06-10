@@ -8,7 +8,7 @@ const User = require('../../models/User');
 
 
 const opts = {
-  jwtFromRequest: PassportExtractJwt.fromAuthHeaderWithScheme('JWT'),
+  jwtFromRequest: PassportExtractJwt.fromAuthHeaderWithScheme('bearer'),
   secretOrKey: config.auth.secret,
 };
 
@@ -16,7 +16,7 @@ const opts = {
  * Return the Passport JWT Strategy object.
  */
 module.exports = new PassportJwtStrategy(opts, (jwtPayload, done) => {
-  User.query().findOne('email', jwtPayload.id)
+  return User.query().findById(jwtPayload.sub)
     .then((user) => {
       if (!user) {
         const error = new Error('Incorrect email or password.');
@@ -25,7 +25,8 @@ module.exports = new PassportJwtStrategy(opts, (jwtPayload, done) => {
         return done(error);
       }
 
-      return done(null, user);
+      return user.$query().patch({ last_login: new Date() })
+        .then(() => done(null, user));
     })
     .catch(err => done(err));
 });

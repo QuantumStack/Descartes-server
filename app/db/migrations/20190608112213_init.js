@@ -29,6 +29,8 @@ exports.up = knex => knex.schema
     // Profiles stores more information about the user that is unrelated to
     // authentication.
     table.integer('user_id').unsigned();
+    table.index('user_id');
+    table.unique('user_id');
     table.foreign('user_id').references('users.id');
 
     // Store the first and last name of the user.
@@ -37,5 +39,5 @@ exports.up = knex => knex.schema
   });
 
 exports.down = knex => knex.schema
-  .dropTable('profiles')
-  .dropTable('users');
+  .dropTableIfExists('profiles')
+  .dropTableIfExists('users');

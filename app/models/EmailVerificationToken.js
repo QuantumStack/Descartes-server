@@ -1,5 +1,6 @@
 const { Model } = require('objection');
-const User = require('./User');
+/* eslint-disable global-require */
+
 
 const logger = require('./../util/logger');
 
@@ -13,6 +14,9 @@ class EmailVerificationToken extends Model {
 
   // Define relations
   static get relationMappings() {
+
+    const User = require('./User');
+
     return {
       user: {
         relation: Model.BelongsToOneRelation,

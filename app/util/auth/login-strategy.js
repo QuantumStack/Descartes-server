@@ -34,10 +34,8 @@ module.exports = new PassportLocalStrategy({
           }
 
           // Since the user is logging in, we will update their last login time.
-          return User.query().patchAndFetchById(user.id, {
-            last_login: new Date(),
-          })
-            .then(updatedUser => done(null, updatedUser))
+          return user.$query().update({ last_login: new Date() })
+            .then(() => done(null, user))
             .catch(patchErr => done(patchErr));
         })
         .catch(bcryptErr => done(bcryptErr));

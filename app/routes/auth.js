@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 const User = require('./../models/User');
-const Profile = require('./../models/Profile');
 const EmailVerificationTokens = require('./../models/EmailVerificationToken');
 
 const confirmationEmailSender = require('./../util/email_verification/sender');
@@ -72,7 +71,7 @@ router.post('/login', (req, res) => {
       sub: user.id,
     };
 
-    const token = jwt.sign(payload, config.auth.secret);
+    const token = jwt.sign(payload, config.auth.secret, { expiresIn: '60d' });
 
     // Otherwise, since there is no error, the user can successfully login.
     return res.json({
@@ -150,7 +149,6 @@ router.post('/signup', (req, res, next) => {
       return passport.authenticate('register', (err, user) => {
         // TODO: Fix the user already exists logic.
         if (err) {
-          console.log(err);
           return res.status(409).json({
             success: false,
             error: 'user-already-exists',
@@ -181,6 +179,13 @@ router.post('/signup', (req, res, next) => {
 router.post('/verify', (req, res) => {
   const { email, confirmationId } = req.body;
 
+  if (!email || !confirmationId) {
+    return res.status(400).json({
+      success: false,
+      error: 'no-email-or-confirmationid',
+      message: 'Please enter your email and confirmation id.',
+    });
+  }
   return User.query().findOne('email', email.trim())
     .then((user) => {
       // Check whether this user exists in the first place.

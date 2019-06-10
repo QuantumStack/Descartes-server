@@ -10,4 +10,4 @@ exports.up = knex => knex.schema
   });
 
 exports.down = knex => knex.schema
-  .dropTable('email_verification_tokens');
+  .dropTableIfExists('email_verification_tokens');

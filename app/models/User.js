@@ -1,4 +1,5 @@
 const { Model } = require('objection');
+/* eslint-disable global-require */
 
 class User extends Model {
   // Define the table name
@@ -13,9 +14,7 @@ class User extends Model {
 
   // Define relations
   static get relationMappings() {
-    // eslint-disable-next-line global-require
     const EmailVerificationToken = require('./EmailVerificationToken');
-    // eslint-disable-next-line global-require
     const Profile = require('./Profile');
 
     return {

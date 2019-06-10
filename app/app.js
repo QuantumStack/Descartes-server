@@ -1,10 +1,9 @@
 const express = require('express');
 const createError = require('http-errors');
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const passport = require('passport');
-
+const cors = require('cors');
 
 // Database Configuration
 const Knex = require('knex');
@@ -25,6 +24,7 @@ if (config.app.node_env === 'production') {
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const apiRouter = require('./routes/api');
 
 const app = express();
 
@@ -32,7 +32,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 /* Authentication Loading
  *
@@ -54,13 +55,15 @@ require('./util/init')();
 // Register routers
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/api',
+  passport.authenticate('jwt', { session: false }),
+  apiRouter);
 
 // Catch 404 and forward to error handler
-app.use((_req, _res, next) => {
-  next(createError(404));
-});
+app.use((req, res, next) => next(createError(404, '404 Not Found')));
 
 // Error handler
-app.use((err, _req, res) => res.status(err.status || 500));
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, _next) => res.sendStatus(err.status || 500));
 
 module.exports = app;
