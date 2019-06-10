@@ -337,9 +337,9 @@ Request to resend another email confirmation.
             "message": "An account with this email address does not exist, try signing up first."
         }
 
-## General Collection [/]
+## Course Collection [/api/course]
 
-### Create Course [POST /create]
+### Create Course [POST /api/course/create]
 
 Want to create a course. Redirect to Stripe for Checkout session.
 
@@ -353,8 +353,7 @@ Want to create a course. Redirect to Stripe for Checkout session.
             {
                 "name": "15-122: Fall 2019",
                 "description": "**Very interesting and fun**",
-                "plan": "plan id (std or lit)",
-                "price": 25
+                "plan": "std || lit"
             }
 
 + Response 200 (application/json; charset=utf-8)
@@ -363,7 +362,7 @@ Want to create a course. Redirect to Stripe for Checkout session.
             "id": "stripe checkout session id"
         }
 
-### Enroll In Course [POST /enroll]
+### Enroll In Course [POST /api/course/enroll]
 
 Join a course a student.
 
@@ -384,7 +383,7 @@ Join a course a student.
             "id": "descartes course id"
         }
 
-### Dashboard Overview [GET /overview]
+### Dashboard Overview [GET /api/course/overview]
 
 Get details about a user's courses.
 
@@ -580,9 +579,9 @@ Get all details about a course from a student's perspective. Notes:
             }
         }
 
-## Account Collection [/account]
+## Account Collection [/api/account]
 
-### Account Overview [GET /account]
+### Account Overview [GET /api/account]
 
 Get just the details about a user.
 
@@ -609,7 +608,7 @@ Get just the details about a user.
             ]
         }
 
-### Change Account Details [POST /account]
+### Change Account Details [POST /api/acocunt/modify]
 
 Modify a user's name and/or password.
 
