@@ -11,6 +11,8 @@ const { Model } = require('objection');
 
 const knexConfig = require('./db/knexfile');
 
+// Custom logger
+const customLogger = require('./util/logger');
 
 // Import overall configuration
 const config = require('./config');
@@ -65,5 +67,12 @@ app.use((req, res, next) => next(createError(404, '404 Not Found')));
 // Error handler
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, _next) => res.sendStatus(err.status || 500));
+
+app.listen(config.app.port || 3000, () => {
+  customLogger.log({
+    level: 'info',
+    message: `Listening on port ${config.app.port || 3000}`,
+  });
+});
 
 module.exports = app;

@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "startjs": "node ./bin/www",
+    "start": "node app.js",
+    "test": "mocha ./tests --recursive"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -28,8 +30,10 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.17.3"
+    "eslint-plugin-import": "^2.17.3",
+    "mocha": "^6.1.4"
   }
 }
