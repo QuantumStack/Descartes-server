@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Exit with failure code on error.
+set -e
+
 
 # Copy config file over
 cp ./src/tests/files/testconfig.js ./src/config.js
