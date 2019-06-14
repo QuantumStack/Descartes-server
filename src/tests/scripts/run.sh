@@ -12,4 +12,4 @@ npx knex --knexfile ./src/db/knexfile.js migrate:rollback --all
 npx knex --knexfile ./src/db/knexfile.js migrate:latest
 
 # Run tests
-mocha ./src/tests --recursive --exit
+mocha ./src/tests/routes --recursive --exit
