@@ -1,4 +1,4 @@
 REM Rollback then migrate
 
-call npx knex --knexfile ./src/db/knexfile.js migrate:rollback --all
-call npx knex --knexfile ./src/db/knexfile.js migrate:latest
+call npx knex --cwd ./src/db migrate:rollback --all
+call npx knex --cwd ./src/db migrate:latest

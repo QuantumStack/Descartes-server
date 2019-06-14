@@ -3,7 +3,7 @@ const { describe } = require('mocha');
 const request = require('supertest');
 const app = require('../../app');
 
-describe('GET /', () => {
+module.exports = describe('GET /', () => {
   it('Test Health of API Server', (done) => {
     request(app)
       .get('/')
