@@ -1,7 +1,7 @@
 const { describe } = require('mocha');
 
 const request = require('supertest');
-const app = require('./../app');
+const app = require('../../app');
 
 describe('GET /', () => {
   it('Test Health of API Server', (done) => {

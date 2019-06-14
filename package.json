@@ -1,11 +1,11 @@
 {
-  "name": "app",
-  "version": "0.0.0",
+  "name": "descartes-server",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "startjs": "node app/bin/www",
-    "start": "node app/app.js",
-    "test": "mocha app/tests/runner.js --exit"
+    "startjs": "node src/bin/www",
+    "start": "node src/app.js",
+    "test": "src/tests/scripts/run.sh"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
