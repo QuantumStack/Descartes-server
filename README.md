@@ -7,6 +7,13 @@ Express RESTful backend for Descartes.
   made with ❤️ in Pittsburgh, PA by <a href="https://quantumstack.xyz">QuantumStack</a>
 </sup></div>
 
+## Testing
+
+| Branch | Status |
+|--------|--------|
+| `master` |  [![Build Status](https://travis-ci.com/QuantumStack/Descartes-server.svg?branch=master)](https://travis-ci.com/QuantumStack/Descartes-server)      |
+| `dev` |   [![Build Status](https://travis-ci.com/QuantumStack/Descartes-server.svg?branch=dev)](https://travis-ci.com/QuantumStack/Descartes-server)     |
+
 ## Configuration
 
 Go to `./app/config.js` and fill in the following.
