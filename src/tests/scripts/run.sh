@@ -5,7 +5,7 @@ set -e
 
 
 # Copy config file over
-cp ./src/tests/files/testconfig.js ./src/config.js
+cp ./src/tests/files/travis.config.js ./src/config.js
 
 # Rollback then migrate
 npx knex --knexfile ./src/db/knexfile.js migrate:rollback --all

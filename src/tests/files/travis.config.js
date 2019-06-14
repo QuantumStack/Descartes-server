@@ -20,7 +20,7 @@ const config = {
       host: 'localhost',
       port: 5432,
       name: 'descartes',
-      user: 'adityapillai',
+      user: 'postgres',
       pass: null,
     },
     production: {
