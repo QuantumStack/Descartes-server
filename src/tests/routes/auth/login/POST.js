@@ -9,8 +9,6 @@ require('./../signup/POST');
 
 const POST_LOGIN_URL = '/auth/login';
 
-let jwt = null;
-
 describe('POST /auth/login', () => {
   before((done) => {
     // Manually verify the user 'aditya@example.com'
