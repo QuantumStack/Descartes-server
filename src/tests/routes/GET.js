@@ -3,7 +3,19 @@ const { describe } = require('mocha');
 const request = require('supertest');
 const app = require('../../app');
 
+const knex = require('./../helpers/knex');
+
+
+// handles health check for server
 module.exports = describe('GET /', () => {
+  before((done) => {
+    knex.migrate.rollback()
+      .then(() => knex.migrate.latest())
+      .then(() => {
+        done();
+      });
+  });
+
   it('Test Health of API Server', (done) => {
     request(app)
       .get('/')
