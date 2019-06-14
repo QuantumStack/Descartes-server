@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "startjs": "node ./bin/www",
-    "start": "node app.js",
+    "startjs": "node app/bin/www",
+    "start": "node app/app.js",
     "test": "mocha tests/runner.js --exit"
   },
   "dependencies": {
