@@ -5,7 +5,7 @@
   "scripts": {
     "startjs": "node ./bin/www",
     "start": "node app.js",
-    "test": "mocha ./tests --recursive"
+    "test": "mocha tests/runner.js --exit"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -34,6 +34,7 @@
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.17.3",
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "supertest": "^4.0.2"
   }
 }

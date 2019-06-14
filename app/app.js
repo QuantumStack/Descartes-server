@@ -75,4 +75,9 @@ app.listen(config.app.port || 3000, () => {
   });
 });
 
+const stop = () => {
+  app.close();
+};
+
 module.exports = app;
+module.exports.stop = stop;
