@@ -8,7 +8,7 @@ require('./../../GET');
 
 const POST_SIGNUP_URL = '/auth/signup';
 
-describe(`POST ${POST_SIGNUP_URL}`, () => {
+describe('POST /auth/signup', () => {
   before((done) => {
     knex.migrate.rollback()
       .then(() => knex.migrate.latest())

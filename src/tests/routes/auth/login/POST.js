@@ -36,7 +36,6 @@ describe('POST /auth/login', () => {
         if (!res.body.success) throw new Error('Returned unsuccessful on successful login.');
         if (res.body.message !== 'You have successfully logged in.') throw new Error('Invalid message.');
         if (!('token' in res.body)) throw new Error('Token not found in response.');
-        jwt = res.body.token;
         done();
       });
   });
@@ -92,5 +91,3 @@ describe('POST /auth/login', () => {
       });
   });
 });
-
-module.exports = jwt;

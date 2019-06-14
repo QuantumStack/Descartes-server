@@ -8,13 +8,8 @@ const knex = require('./../helpers/knex');
 
 // handles health check for server
 module.exports = describe('GET /', () => {
-  before((done) => {
-    knex.migrate.rollback()
-      .then(() => knex.migrate.latest())
-      .then(() => {
-        done();
-      });
-  });
+  before(() => knex.migrate.rollback()
+    .then(() => knex.migrate.latest()));
 
   it('Test Health of API Server', (done) => {
     request(app)
