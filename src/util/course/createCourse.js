@@ -5,7 +5,7 @@ const InstructorCourse = require('./../../models/InstructorCourse');
 module.exports = (user, name, description, planId) => {
   // Calculate the expiration time.
   const expiryDate = new Date();
-  expiryDate.setDate(expiryDate.getDate() + config.plans[planId].expDays);
+  expiryDate.setDate(expiryDate.getDate() + config.plans.planId.expDays);
 
   return user.$relatedQuery('profile')
     // Get the user's profile
