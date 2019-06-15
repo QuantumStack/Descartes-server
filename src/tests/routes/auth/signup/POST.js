@@ -51,6 +51,23 @@ describe('POST /auth/signup', () => {
       }, done);
   });
 
+  it('400 reCAPTCHA Token Not Provided', (done) => {
+    request(app)
+      .post(POST_SIGNUP_URL)
+      .send({
+        email: 'aditya@example.com',
+        password: 'example_password',
+        firstName: 'Aditya',
+        lastName: 'Pillai',
+      })
+      .expect('Content-Type', /json/)
+      .expect(400, {
+        success: false,
+        error: 'no-recaptcha',
+        message: 'The reCAPTCHA verification failed, please try again.',
+      }, done);
+  });
+
   it('409 User Account Already Exists', (done) => {
     request(app)
       .post(POST_SIGNUP_URL)

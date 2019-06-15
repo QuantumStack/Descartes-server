@@ -56,7 +56,7 @@ router.post('/', (req, res, next) => {
   if (config.recaptcha.enabled && !req.body['g-recaptcha-response']) {
     return res.status(400).json({
       success: false,
-      error: 'invalid-recaptcha',
+      error: 'no-recaptcha',
       message: 'The reCAPTCHA verification failed, please try again.',
     });
   }
