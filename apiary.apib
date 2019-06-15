@@ -449,7 +449,7 @@ This collection is entirely authorized via a bearer JWT. All requests must use a
 
             {
                 "code": "qstk",
-                "plan": "std",
+                "plan": 0,
                 "price": 15
             }
             
@@ -536,7 +536,7 @@ Redirect to Stripe for Checkout session or includes `isFree: true` to skip check
             {
                 "name": "15-122: Principles of Imperative Computation - Fall 2019",
                 "description": "An introduction to imperative programming.",
-                "plan": "std",
+                "plan": 0,
                 "price": 200,
                 "coupon": "discount_code"
             }
@@ -558,7 +558,7 @@ Redirect to Stripe for Checkout session or includes `isFree: true` to skip check
             {
                 "name": "15-150: Principles of Functional Programming - Fall 2019",
                 "description": "An introduction to bad programming.",
-                "plan": "std",
+                "plan": 0,
                 "price": 200
             }
 
@@ -579,10 +579,38 @@ Redirect to Stripe for Checkout session or includes `isFree: true` to skip check
 
             {
                 "description": "An introduction to bad programming.",
-                "plan": "std",
+                "plan": 0,
                 "price": 200
             }
 
++ Response 400 (application/json; charset=utf-8)
+
+        {
+            "success": false,
+            "error": "no-course-name",
+            "message": "Please provide a course name."
+        }
+
++ Request 400 Description Not Provided
+    + Headers
+        
+            Authorization: bearer JWT
+
+    + Body
+
+            {
+                "name": "15-150: Principles of Functional Programming - Fall 2019",
+                "plan": 0,
+                "price": 200
+            }
+
++ Response 400 (application/json; charset=utf-8)
+
+        {
+            "success": false,
+            "error": "no-description",
+            "message": "Please provide a course description."
+        }
         
 + Request 400 Invalid or Expired Coupon Code (application/json)
     + Headers
@@ -878,7 +906,7 @@ Get just the details about a user.
                 {
                     "name": "15-122: Fall 2019",
                     "id": "course id",
-                    "plan": "std",
+                    "plan": 0,
                     "date": 1558849250238
                 }
             ]
