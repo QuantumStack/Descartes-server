@@ -43,13 +43,8 @@ router.post('/', (req, res) => {
         });
       }
 
-      // If there is some other generic issue, return a 400 error and a generic
-      // error message.
-      return res.status(400).json({
-        success: false,
-        error: 'unknown-error',
-        message: 'Could not process the form.',
-      });
+      // We don't know what other error can come out, so let's not deal with that.
+      throw err;
     }
 
     if (!user.is_email_verified) {

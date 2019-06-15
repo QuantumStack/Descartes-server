@@ -7,11 +7,6 @@ class User extends Model {
     return 'users';
   }
 
-  // Get email
-  getEmail() {
-    return this.email;
-  }
-
   // Define relations
   static get relationMappings() {
     const EmailVerificationToken = require('./EmailVerificationToken');
@@ -40,11 +35,6 @@ class User extends Model {
   // Get hashed password
   getPassword() {
     return this.password;
-  }
-
-  // Soft delete the user
-  softDelete() {
-    this.is_deleted = true;
   }
 }
 

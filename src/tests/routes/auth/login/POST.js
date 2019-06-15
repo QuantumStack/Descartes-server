@@ -38,6 +38,35 @@ describe('POST /auth/login', () => {
       });
   });
 
+  it('400 Email Not Provided', (done) => {
+    request(app)
+      .post(POST_LOGIN_URL)
+      .send({
+        password: 'example_password',
+      })
+      .expect('Content-Type', /json/)
+      .expect(400, {
+        success: false,
+        error: 'no-email',
+        message: 'Please provide an email address.',
+      }, done);
+  });
+
+  it('400 Password Not Provided', (done) => {
+    request(app)
+      .post(POST_LOGIN_URL)
+      .send({
+        email: 'aditya@example.com',
+      })
+      .expect('Content-Type', /json/)
+      .expect(400, {
+        success: false,
+        error: 'no-password',
+        message: 'Please provide a password',
+      }, done);
+  })
+
+
   it('400 Incorrect Email', (done) => {
     request(app)
       .post(POST_LOGIN_URL)
