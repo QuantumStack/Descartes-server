@@ -7,7 +7,7 @@
     "start": "node src/app.js",
     "test": "src/tests/scripts/run.sh",
     "test:watch": "mocha --watch ./src/tests/routes --recursive",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | tee >(coveralls) >(codacy-coverage)"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "codacy-coverage": "^3.4.0",
     "coveralls": "^3.0.4",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
