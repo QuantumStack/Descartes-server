@@ -5,7 +5,13 @@ module.exports = {
     node: true,
     mocha: true,
   },
-  extends: 'airbnb-base',
+  plugins: [
+    'security',
+  ],
+  extends: [
+    'airbnb-base',
+    'plugin:security/recommended',
+  ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
