@@ -1,6 +1,8 @@
 const EmailVerificationToken = require('./../../models/EmailVerificationToken');
 const emailer = require('./../emailer');
 
+const logger = require('./../logger');
+
 const tokenGenerator = require('./generator');
 
 const config = require('./../../config');
@@ -33,6 +35,11 @@ module.exports = user => EmailVerificationToken.query()
       `,
       };
 
-      emailer.sendMail(message);
+      emailer.sendMail(message).catch((err) => {
+        logger.log({
+          level: 'error',
+          message: err.message,
+        });
+      });
     });
   });

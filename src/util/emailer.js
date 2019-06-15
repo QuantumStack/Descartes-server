@@ -12,13 +12,13 @@ const transporter = nodemailer.createTransport({
     user: email.smtp_user,
     pass: email.smtp_password,
   },
-});
+})
 
 // make sure the mail transport works
 transporter.verify((error) => {
   if (error) {
     logger.log({
-      level: 'warn',
+      level: 'error',
       message: 'Email service not working...',
     });
   } else {
