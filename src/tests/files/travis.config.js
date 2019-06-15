@@ -48,8 +48,8 @@ const config = {
 
   // Verification Token Settings
   email_verification_token: {
-    expiry_time: 60, // in seconds == 1 hour
-    delay_time: 20, // in seconds == 1 hour
+    expiry_time: 5, // in seconds == 1 hour
+    delay_time: 5, // in seconds == 1 hour
   },
 
   // Stripe settings

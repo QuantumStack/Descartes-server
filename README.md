@@ -9,10 +9,10 @@ Express RESTful backend for Descartes.
 
 ## Testing
 
-| Branch | Status |
-|--------|--------|
-| `master` |  [![Build Status](https://travis-ci.com/QuantumStack/Descartes-server.svg?branch=master)](https://travis-ci.com/QuantumStack/Descartes-server)      |
-| `dev` |   [![Build Status](https://travis-ci.com/QuantumStack/Descartes-server.svg?branch=dev)](https://travis-ci.com/QuantumStack/Descartes-server)     |
+| Branch | Test Cases | Coverage |
+|--------|--------|--------|
+| `master` | [![Build Status](https://travis-ci.com/QuantumStack/Descartes-server.svg?branch=master)](https://travis-ci.com/QuantumStack/Descartes-server) | [![Coverage Status](https://coveralls.io/repos/github/QuantumStack/Descartes-server/badge.svg?branch=dev)](https://coveralls.io/github/QuantumStack/Descartes-server?branch=dev) |
+| `dev` | [![Build Status](https://travis-ci.com/QuantumStack/Descartes-server.svg?branch=dev)](https://travis-ci.com/QuantumStack/Descartes-server) | [![Coverage Status](https://coveralls.io/repos/github/QuantumStack/Descartes-server/badge.svg?branch=master)](https://coveralls.io/github/QuantumStack/Descartes-server?branch=master) |
 
 ## Configuration
 
