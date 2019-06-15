@@ -24,8 +24,8 @@ if (config.app.node_env === 'production') {
 }
 
 
-const indexRouter = require('./routes/index');
-const authRouter = require('./routes/auth');
+const indexRouter = require('./routes');
+// const authRouter = require('./routes/auth');
 const apiRouter = require('./routes/api');
 
 const app = express();
@@ -56,7 +56,7 @@ require('./util/init')();
 
 // Register routers
 app.use('/', indexRouter);
-app.use('/auth', authRouter);
+// app.use('/auth', authRouter);
 app.use('/api',
   passport.authenticate('jwt', { session: false }),
   apiRouter);
