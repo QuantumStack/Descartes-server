@@ -1,12 +1,17 @@
-
 exports.up = knex => knex.schema
   .createTable('users', (table) => {
     // General ID for the User
     table.bigIncrements('id');
 
     // Identifies time information about this user
-    table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable();
-    table.timestamp('last_updated').defaultTo(knex.fn.now()).notNullable();
+    table
+      .timestamp('created_at')
+      .defaultTo(knex.fn.now())
+      .notNullable();
+    table
+      .timestamp('last_updated')
+      .defaultTo(knex.fn.now())
+      .notNullable();
     table.timestamp('last_login');
 
     // Stores whether the user deleted the account
@@ -38,6 +43,4 @@ exports.up = knex => knex.schema
     table.string('last_name').notNullable();
   });
 
-exports.down = knex => knex.schema
-  .dropTableIfExists('profiles')
-  .dropTableIfExists('users');
+exports.down = knex => knex.schema.dropTableIfExists('profiles').dropTableIfExists('users');
