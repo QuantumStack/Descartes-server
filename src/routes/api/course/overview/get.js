@@ -1,6 +1,6 @@
-/**
- * Helper functions for the POST /api/course/overview route.
- */
+const express = require('express');
+
+const router = express.Router();
 
 
 /**
@@ -47,14 +47,25 @@ const studentCourses = user => user
     .then(courses => courses));
 
 /**
- * Returns an object of the overview that is to be sent to user.
+ * overviewHelper returns an object of the overview that is to be sent to user.
  * @param user
  * @returns JSON object defined in API specs.
  */
-module.exports = user => Promise.all([
+const overviewHelper = user => Promise.all([
   instructorCourses(user),
   studentCourses(user),
 ]).then(results => ({
   instructorCourses: results[0],
   studentCourses: results[1],
 }));
+
+/**
+ * GET /api/course/overview
+ *
+ * Gives an overview of the courses for both instructors and students.
+ */
+router.get('/', (req, res) => overviewHelper(req.user)
+  .then(result => res.status(200).json(result)));
+
+
+module.exports = router;

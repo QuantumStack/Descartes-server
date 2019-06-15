@@ -6,8 +6,8 @@ const app = require('../../app');
 const knex = require('./../helpers/knex');
 
 
-// handles health check for server
-module.exports = describe('GET /', () => {
+// Health Check for server before other tests commence.
+describe('GET /', () => {
   before(() => knex.migrate.rollback()
     .then(() => knex.migrate.latest()));
 
