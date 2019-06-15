@@ -3,7 +3,6 @@ const { describe } = require('mocha');
 const request = require('supertest');
 const app = require('../../../../app');
 const knex = require('../../../helpers/knex');
-const User = require('../../../../models/User');
 
 require('./../../GET');
 
