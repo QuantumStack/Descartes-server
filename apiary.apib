@@ -9,9 +9,9 @@ I think, therefore I am. [Open-source](https://github.com/quantumstack/descartes
   made with ❤️ in Pittsburgh, PA by <a href="https://quantumstack.xyz">QuantumStack</a>
 </sup></div>
 
-## Authentication Collection [/auth]
+## Authorization Collection [/auth]
 
-This API uses OAuth v2 Bearer Token / Personal Access Token for its authentication.
+This API uses OAuth v2 bearer Token / Personal Access Token for its Authorization.
 
 ### Login [POST /auth/login]
 
@@ -392,10 +392,10 @@ Request to resend another email confirmation.
 
 Determine if a coupon is valid and effect it has.
 
-+ Request 200 Valid coupon (application/json)
++ Request 200 Valid Coupon (application/json)
     + Headers
         
-            Authentication: Bearer JWT
+            Authorization: bearer JWT
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -407,7 +407,7 @@ Determine if a coupon is valid and effect it has.
 + Request 404 Invalid or expired coupon (application/json)
     + Headers
         
-            Authentication: Bearer JWT
+            Authorization: bearer JWT
 
 + Response 404 (application/json; charset=utf-8)
 
@@ -422,7 +422,7 @@ Want to create a course. Redirect to Stripe for Checkout session or includes `is
 + Request 200 Payment bypassed (application/json)
     + Headers
         
-            Authentication: Bearer JWT
+            Authorization: bearer JWT
 
     + Body
 
@@ -443,7 +443,7 @@ Want to create a course. Redirect to Stripe for Checkout session or includes `is
 + Request 200 Redirect to Stripe (application/json)
     + Headers
         
-            Authentication: Bearer JWT
+            Authorization: bearer JWT
 
     + Body
 
@@ -469,7 +469,7 @@ Join a course a student.
 + Request (application/json)
     + Headers
 
-            Authentication: Bearer JWT
+            Authorization: bearer JWT
 
     + Body
 
@@ -490,7 +490,7 @@ Get details about a user's courses.
 + Request (application/json)
     + Headers
 
-            Authentication: Bearer JWT
+            Authorization: bearer JWT
             
 + Response 200 (application/json; charset=utf-8)
 
@@ -535,7 +535,7 @@ Get all details about a course from an instructor's perspective.
 + Request (application/json)
     + Headers
     
-            Authentication: Bearer JWT
+            Authorization: bearer JWT
     
 + Response 200 (application/json; charset=utf-8)
 
@@ -567,7 +567,7 @@ Get all details about a course from a student's perspective. Notes:
 + Request (application/json)
     + Headers
 
-            Authentication: Bearer JWT
+            Authorization: bearer JWT
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -718,7 +718,7 @@ Get just the details about a user.
 + Request (application/json)
     + Headers
 
-            Authentication: Bearer JWT
+            Authorization: bearer JWT
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -746,7 +746,7 @@ Modify a user's name and/or password.
 + Request (application/json)
     + Headers (application/json)
 
-        Authentication: Bearer JWT
+        Authorization: bearer JWT
 
     + Body
 
