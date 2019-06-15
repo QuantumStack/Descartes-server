@@ -14,7 +14,6 @@ class EmailVerificationToken extends Model {
 
   // Define relations
   static get relationMappings() {
-
     const User = require('./User');
 
     return {

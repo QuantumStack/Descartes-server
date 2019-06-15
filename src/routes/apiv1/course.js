@@ -1,18 +1,12 @@
 const express = require('express');
 
 const router = express.Router();
-const stripe = require('stripe');
 
 const config = require('./../../config');
-
-const Course = require('./../../models/Course');
-const Profile = require('./../../models/Profile');
 
 const createCourse = require('./../../util/course/createCourse');
 const studentEnrollWithCode = require('./../../util/course/studentEnrollWithCode');
 const overviewHelper = require('./../../util/course/overviewHelpers');
-
-const stripeHandler = stripe(config.stripe.secret_key);
 
 
 /** POST /api/course/create

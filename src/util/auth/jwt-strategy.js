@@ -15,18 +15,17 @@ const opts = {
 /**
  * Return the Passport JWT Strategy object.
  */
-module.exports = new PassportJwtStrategy(opts, (jwtPayload, done) => {
-  return User.query().findById(jwtPayload.sub)
-    .then((user) => {
-      if (!user) {
-        const error = new Error('Incorrect email or password.');
-        error.name = 'IncorrectCredentialsError';
+module.exports = new PassportJwtStrategy(opts, (jwtPayload, done) => User
+  .query().findById(jwtPayload.sub)
+  .then((user) => {
+    if (!user) {
+      const error = new Error('Incorrect email or password.');
+      error.name = 'IncorrectCredentialsError';
 
-        return done(error);
-      }
+      return done(error);
+    }
 
-      return user.$query().patch({ last_login: new Date() })
-        .then(() => done(null, user));
-    })
-    .catch(err => done(err));
-});
+    return user.$query().patch({ last_login: new Date() })
+      .then(() => done(null, user));
+  })
+  .catch(err => done(err)));
