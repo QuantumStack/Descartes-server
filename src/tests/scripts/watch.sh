@@ -11,4 +11,4 @@ cp ./src/tests/files/travis.config.js ./src/config.js
 ./src/tests/scripts/rollbackandmigrate.sh
 
 # Run tests
-nyc mocha ./src/tests/routes --recursive --exit
+nyc mocha ./src/tests/routes --recursive -w
