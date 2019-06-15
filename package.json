@@ -7,7 +7,7 @@
     "start": "node src/app.js",
     "test": "src/tests/scripts/run.sh",
     "test:watch": "mocha --watch ./src/tests/routes --recursive",
-    "coverage": "nyc report --reporter=text-lcov | tee >(coveralls) >(codacy-coverage)"
+    "coverage": "nyc report --reporter=text-lcov | bash -c 'tee >(coveralls) >(codacy-coverage)'"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
