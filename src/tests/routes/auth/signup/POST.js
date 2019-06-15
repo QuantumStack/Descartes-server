@@ -3,6 +3,7 @@ const { describe } = require('mocha');
 const request = require('supertest');
 const app = require('../../../../app');
 const knex = require('../../../helpers/knex');
+const User = require('../../../../models/User');
 
 require('./../../GET');
 
@@ -17,7 +18,7 @@ describe('POST /auth/signup', () => {
       });
   });
 
-  it('200 Valid Signup', (done) => {
+  it('200 Valid Signup (with reCAPTCHA)', (done) => {
     request(app)
       .post(POST_SIGNUP_URL)
       .send({
@@ -26,6 +27,23 @@ describe('POST /auth/signup', () => {
         firstName: 'Aditya',
         lastName: 'Pillai',
         'g-recaptcha-response': 'recaptcha-token',
+      })
+      .expect('Content-Type', /json/)
+      .expect(200, {
+        success: true,
+        message: 'You have successfully created an account.',
+      }, done);
+  });
+
+  it('200 Valid Signup (without reCAPTCHA)', (done) => {
+    request(app)
+      .post(POST_SIGNUP_URL)
+      .send({
+        email: 'aditya_2@example.com',
+        password: 'different_password',
+        firstName: 'Aditya',
+        lastName: 'Pillai',
+        'g-recaptcha-response': 'disabled',
       })
       .expect('Content-Type', /json/)
       .expect(200, {

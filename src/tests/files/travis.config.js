@@ -3,7 +3,7 @@ const config = {
 
   // Application Settings
   app: {
-    node_env: 'dev',
+    node_env: 'test',
     port: 3000,
     client_url: 'http://localhost:3000',
   },
@@ -34,8 +34,8 @@ const config = {
 
   // Recaptcha Settings
   recaptcha: {
-    secret: 'secretive',
-    enabled: false,
+    secret: '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
+    enabled: true,
   },
 
   // Emailing Settings
