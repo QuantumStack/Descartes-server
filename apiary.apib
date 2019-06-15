@@ -331,9 +331,9 @@ Verify an email address given a confirmation code and email address. Note that t
 + Response 400 (application/json; charset=utf-8)
 
         {
-          "success": false,
-          "error": "invalid-email-confirmation",
-          "message": "Your email has already been verified!',
+            "success": false,
+            "error": "invalid-email-confirmation",
+            "message": "Your email has already been verified!',
         }
 
 ### Resend Email Confirmation [POST /auth/resend]
@@ -404,7 +404,80 @@ Request to resend another email confirmation.
             "message": "An account with this email address does not exist, try signing up first."
         }
 
+### Authentication Verification [GET /api/]
+
++ Request 200 Authentication Verified (application/json)
+    + Headers
+
+            Authorization: bearer JWT
+            
++ Response 200
+
+        {
+            "success": true
+        }
+        
++ Request 401 Unauthorized No Token (application/json)
+    + Headers
+    
+            Authorization: bearer invalid_jwt
+
++ Response 401
+
+
+
++ Request 401 Unauthorized Invalid Token (application/json)
+    + Headers
+    
+            Authorization: bearer invalid_jwt
+
++ Response 401
+
+
 ## Course Collection [/api/course]
+
+This collection is entirely authorized via a bearer JWT. All requests must use a JWT, otherwise a `401 Unauthorized` error will be sent.
+
+### (Admin) Add Coupon [POST /api/course/create/coupon/admin]
+
++ Request 200 Created Coupon (application/json)
+    + Headers
+
+            Authorization: bearer JWT
+    
+    + Body
+
+            {
+                "code": "qstk",
+                "plan": "std",
+                "price": 15
+            }
+            
++ Response 200 (application/json; charset=utf-8)
+
+        {
+            "success": true
+        }
+
+
+### (Admin) List Coupons [GET /api/course/create/coupon/admin]
+
++ Request 200 List Coupons (application/json)
+    + Headers
+
+            Authorization: bearer JWT
+            
++ Response 200
+
+        {
+            {
+                "uuid": "1df1-ssva-A3f0-abw3",
+                "code": "qstk",
+                "plan": "std",
+                "price": 15
+            },
+            ...
+        }
 
 ### Check Coupon [GET /api/course/create/coupon{?code}]
 
@@ -412,17 +485,32 @@ Determine if a coupon is valid and effect it has.
 
 + Request 200 Valid Coupon (application/json)
     + Headers
-        
+
             Authorization: bearer JWT
 
 + Response 200 (application/json; charset=utf-8)
 
         {
+            "success": true,
             "verified": true,
+            "plan": "std",
             "price": 0
         }
         
-+ Request 404 Invalid or expired coupon (application/json)
++ Request 400 Coupon Not Provided (application/json)
+    + Headers
+
+            Authorization: bearer JWT
+            
++ Response 400 (application/json; charset=utf-8)
+
+        {
+            "success": false,
+            "error": "no-coupon",
+            "message": "Please provide a coupon code."
+        }
+
++ Request 404 Invalid or Expired Coupon Code (application/json)
     + Headers
         
             Authorization: bearer JWT
@@ -430,12 +518,13 @@ Determine if a coupon is valid and effect it has.
 + Response 404 (application/json; charset=utf-8)
 
         {
+            "success": true,
             "verified": false
         }
 
 ### Create Course [POST /api/course/create]
 
-Want to create a course. Redirect to Stripe for Checkout session or includes `isFree: true` to skip checkout with Stripe.
+Redirect to Stripe for Checkout session or includes `isFree: true` to skip checkout with Stripe.
 
 + Request 200 Payment Portal Skipped (application/json)
     + Headers
@@ -445,16 +534,17 @@ Want to create a course. Redirect to Stripe for Checkout session or includes `is
     + Body
 
             {
-                "name": "15-122: Fall 2019",
-                "description": "**Very interesting and fun**",
-                "plan": "std || lit",
-                "price": 25,
-                "coupon": "super secret 100% off"
+                "name": "15-122: Principles of Imperative Computation - Fall 2019",
+                "description": "An introduction to imperative programming.",
+                "plan": "std",
+                "price": 200,
+                "coupon": "discount_code"
             }
 
 + Response 200 (application/json; charset=utf-8)
 
         {
+            "success": true,
             "isFree": true
         }
         
@@ -466,18 +556,55 @@ Want to create a course. Redirect to Stripe for Checkout session or includes `is
     + Body
 
             {
-                "name": "15-122: Fall 2019",
-                "description": "**Very interesting and fun**",
-                "plan": "std || lit",
-                "price": 25,
-                "coupon": "super secret 100% off"
+                "name": "15-150: Principles of Functional Programming - Fall 2019",
+                "description": "An introduction to bad programming.",
+                "plan": "std",
+                "price": 200
             }
 
 + Response 200 (application/json; charset=utf-8)
 
         {
+            "success": true,
             "isFree": false,
-            "stripeId": "from Stripe server library"
+            "stripeId": "stripe_id"
+        }
+        
++ Request 400 Course Name Not Provided
+    + Headers
+        
+            Authorization: bearer JWT
+
+    + Body
+
+            {
+                "description": "An introduction to bad programming.",
+                "plan": "std",
+                "price": 200
+            }
+
+        
++ Request 400 Invalid or Expired Coupon Code (application/json)
+    + Headers
+        
+            Authorization: bearer JWT
+            
+    + Body
+
+            {
+                "name": "15-151: Mathematical Foundations for Computer Science - Fall 2019",
+                "description": "Great course, greater instructor.",
+                "plan": "lit",
+                "price": 50,
+                "coupon": "invalid_coupon"
+            }
+            
++ Response 400 (application/json; charset=utf-8)
+
+        {
+            "success": false,
+            "error": "invalid-coupon",
+            "message": "The coupon code entered is not valid.",
         }
 
 ### Enroll In Course [POST /api/course/enroll]
