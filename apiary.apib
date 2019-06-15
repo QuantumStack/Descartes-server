@@ -138,6 +138,24 @@ Create a new user.
             "message": "You have successfully created an account."
         }
     
++ Request 400 reCAPTCHA Token Not Provided (application/json)
+    + Body
+
+            {
+                "email": "aditya@example.com",
+                "password": "example_password",
+                "firstName": "Aditya",
+                "lastName": "Pillai"
+            }
+
++ Response 400 (application/json; charset=utf-8)
+
+        {
+            "success": false,
+            "error": "no-recaptcha",
+            "message": "The reCAPTCHA verification failed, please try again."
+        }
+
 + Request 400 Invalid reCAPTCHA Token (application/json)
     + Body
 
@@ -419,7 +437,7 @@ Determine if a coupon is valid and effect it has.
 
 Want to create a course. Redirect to Stripe for Checkout session or includes `isFree: true` to skip checkout with Stripe.
 
-+ Request 200 Payment bypassed (application/json)
++ Request 200 Payment Portal Skipped (application/json)
     + Headers
         
             Authorization: bearer JWT
