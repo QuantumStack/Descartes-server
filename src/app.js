@@ -23,7 +23,6 @@ if (config.app.node_env === 'production') {
   Model.knex(Knex(knexConfig.development));
 }
 
-
 const indexRouter = require('./routes');
 // const authRouter = require('./routes/auth');
 const apiRouter = require('./routes/api');
@@ -57,9 +56,7 @@ require('./util/init')();
 // Register routers
 app.use('/', indexRouter);
 // app.use('/auth', authRouter);
-app.use('/api',
-  passport.authenticate('jwt', { session: false }),
-  apiRouter);
+app.use('/api', passport.authenticate('jwt', { session: false }), apiRouter);
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => next(createError(404, '404 Not Found')));

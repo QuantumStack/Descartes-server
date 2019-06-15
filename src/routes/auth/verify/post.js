@@ -20,8 +20,9 @@ router.post('/', (req, res) => {
       message: 'Please enter your email and confirmation id.',
     });
   }
-  return User.query().findOne('email', email.trim())
-    .then((user) => {
+  return User.query()
+    .findOne('email', email.trim())
+    .then(user => {
       // Check whether this user exists in the first place.
       if (!user) {
         return res.status(400).json({
@@ -42,11 +43,12 @@ router.post('/', (req, res) => {
 
       // Since the user exists, try to find a valid verification token matching
       // the data that was sent.
-      return EmailVerificationTokens.query().findOne({
-        user_id: user.id,
-        token: confirmationId.trim(),
-      })
-        .then((token) => {
+      return EmailVerificationTokens.query()
+        .findOne({
+          user_id: user.id,
+          token: confirmationId.trim(),
+        })
+        .then(token => {
           if (!token) {
             return res.status(400).json({
               success: false,
@@ -56,15 +58,21 @@ router.post('/', (req, res) => {
           }
 
           // Now, let's verify the user.
-          return user.$query().patch({ is_email_verified: true })
+          return user
+            .$query()
+            .patch({ is_email_verified: true })
             .then(() => {
               // After we modified the user, let's delete the token and send
               // the user a success status.
-              token.$query().delete()
-                .then(() => res.status(200).json({
-                  success: true,
-                  message: 'Your email has been successfully verified.',
-                }));
+              token
+                .$query()
+                .delete()
+                .then(() =>
+                  res.status(200).json({
+                    success: true,
+                    message: 'Your email has been successfully verified.',
+                  })
+                );
             });
         });
     });

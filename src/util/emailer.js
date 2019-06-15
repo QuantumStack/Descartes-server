@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // make sure the mail transport works
-transporter.verify((error) => {
+transporter.verify(error => {
   if (error) {
     logger.log({
       level: 'error',

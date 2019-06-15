@@ -1,6 +1,4 @@
-
 const config = {
-
   // Application Settings
   app: {
     node_env: 'test',
@@ -69,8 +67,6 @@ const config = {
       expDays: 185,
     },
   },
-
 };
-
 
 module.exports = config;

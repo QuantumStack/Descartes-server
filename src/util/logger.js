@@ -8,7 +8,7 @@ const logger = createLogger({
     }),
     format.errors({ stack: true }),
     format.splat(),
-    format.json(),
+    format.json()
   ),
   defaultMeta: { service: 'descartes-service' },
   transports: [
@@ -26,13 +26,11 @@ const logger = createLogger({
 // with the colorized simple format.
 //
 if (process.env.NODE_ENV !== 'production') {
-  logger.add(new transports.Console({
-    format: format.combine(
-      format.colorize(),
-      format.simple(),
-    ),
-  }));
+  logger.add(
+    new transports.Console({
+      format: format.combine(format.colorize(), format.simple()),
+    })
+  );
 }
-
 
 module.exports = logger;

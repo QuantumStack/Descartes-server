@@ -14,9 +14,7 @@ const router = express.Router();
  * Creates a user account and sends a confirmation email.
  */
 router.post('/', (req, res, next) => {
-  const {
-    email, password, firstName, lastName,
-  } = req.body;
+  const { email, password, firstName, lastName } = req.body;
 
   // If a field is missing, alert the user.
   if (!email) {
@@ -61,39 +59,43 @@ router.post('/', (req, res, next) => {
     });
   }
 
-  return verifyRecaptcha(recaptchaResponse.trim(),
-    (recaptchaSuccess) => {
-      if (!recaptchaSuccess) {
-        return res.status(400).json({
+  return verifyRecaptcha(recaptchaResponse.trim(), recaptchaSuccess => {
+    if (!recaptchaSuccess) {
+      return res.status(400).json({
+        success: false,
+        error: 'invalid-recaptcha',
+        message: 'The reCAPTCHA verification failed, please try again.',
+      });
+    }
+
+    // Now, let's try our passport local signup strategy.
+    return passport.authenticate('register', (err, user) => {
+      // TODO: Fix the user already exists logic.
+      if (err) {
+        return res.status(409).json({
           success: false,
-          error: 'invalid-recaptcha',
-          message: 'The reCAPTCHA verification failed, please try again.',
+          error: 'user-already-exists',
+          message: 'A user with this email address already exists.',
         });
       }
 
-      // Now, let's try our passport local signup strategy.
-      return passport.authenticate('register', (err, user) => {
-        // TODO: Fix the user already exists logic.
-        if (err) {
-          return res.status(409).json({
-            success: false,
-            error: 'user-already-exists',
-            message: 'A user with this email address already exists.',
-          });
-        }
-
-        // Let's now create the user's profile
-        return user.$relatedQuery('profile').insert({
+      // Let's now create the user's profile
+      return user
+        .$relatedQuery('profile')
+        .insert({
           first_name: firstName,
           last_name: lastName,
         })
-          .then(() => confirmationEmailSender(user)
-            .finally(() => res.status(200).json({
+        .then(() =>
+          confirmationEmailSender(user).finally(() =>
+            res.status(200).json({
               success: true,
               message: 'You have successfully created an account.',
-            })));
-      })(req, res, next);
-    });
+            })
+          )
+        );
+    })(req, res, next);
+  });
 });
 
 module.exports = router;

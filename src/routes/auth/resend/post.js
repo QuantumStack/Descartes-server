@@ -6,7 +6,6 @@ const confirmationEmailSender = require('./../../../util/email_verification/send
 
 const router = express.Router();
 
-
 /**
  * POST /auth/resend
  *
@@ -23,13 +22,15 @@ router.post('/', (req, res) => {
     });
   }
 
-  return User.query().findOne('email', email.trim())
-    .then((user) => {
+  return User.query()
+    .findOne('email', email.trim())
+    .then(user => {
       if (!user) {
         return res.status(400).json({
           success: false,
           error: 'non-existent-email',
-          message: 'An account with this email address does not exist, try signing up first.',
+          message:
+            'An account with this email address does not exist, try signing up first.',
         });
       }
 
@@ -41,12 +42,13 @@ router.post('/', (req, res) => {
         });
       }
 
-      return confirmationEmailSender(user).then((error) => {
+      return confirmationEmailSender(user).then(error => {
         if (error && error.name === 'email-verification-too-quickly') {
           return res.status(400).json({
             success: false,
             error: 'email-verification-too-quickly',
-            message: 'You have already requested an email verification recently.',
+            message:
+              'You have already requested an email verification recently.',
           });
         }
 

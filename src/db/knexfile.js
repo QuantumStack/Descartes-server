@@ -12,16 +12,17 @@ module.exports = {
       password: config.db.development.pass,
     },
     pool: {
-      afterCreate: (conn, done) => conn.query('SET timezone="UTC";', (err) => {
-        if (err) {
-          logger.log({
-            level: 'warn',
-            message: 'Could not set timezone to UTC...',
-          });
-          return done(err);
-        }
-        return done(null);
-      }),
+      afterCreate: (conn, done) =>
+        conn.query('SET timezone="UTC";', err => {
+          if (err) {
+            logger.log({
+              level: 'warn',
+              message: 'Could not set timezone to UTC...',
+            });
+            return done(err);
+          }
+          return done(null);
+        }),
     },
   },
 
@@ -37,16 +38,17 @@ module.exports = {
     pool: {
       min: 2,
       max: 10,
-      afterCreate: (conn, done) => conn.query('SET timezone="UTC";', (err) => {
-        if (err) {
-          logger.log({
-            level: 'warn',
-            message: 'Could not set timezone to UTC...',
-          });
-          return done(err);
-        }
-        return done(null);
-      }),
+      afterCreate: (conn, done) =>
+        conn.query('SET timezone="UTC";', err => {
+          if (err) {
+            logger.log({
+              level: 'warn',
+              message: 'Could not set timezone to UTC...',
+            });
+            return done(err);
+          }
+          return done(null);
+        }),
     },
     migrations: {
       tableName: 'knex_migrations',

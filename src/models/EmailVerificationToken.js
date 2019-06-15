@@ -1,7 +1,6 @@
 const { Model } = require('objection');
 /* eslint-disable global-require */
 
-
 const logger = require('./../util/logger');
 
 const expiryTime = require('./../config').email_verification_token.expiry_time;
@@ -36,24 +35,25 @@ class EmailVerificationToken extends Model {
 
     // Calculate timeTillDelete with the fact that we're dealing with time
     // in milliseconds, but expiryTime is given to us in seconds.
-    const timeTillDelete = createdAt - Date.now() + (expiryTime * 1000);
+    const timeTillDelete = createdAt - Date.now() + expiryTime * 1000;
 
     logger.log({
       level: 'debug',
-      message: `Deleting emailVerificationToken with ID ${this.id} in `
-        + `${timeTillDelete / 1000} seconds.`,
+      message:
+        `Deleting emailVerificationToken with ID ${this.id} in ` +
+        `${timeTillDelete / 1000} seconds.`,
     });
 
     setTimeout(() => {
-      EmailVerificationToken.query().deleteById(this.id)
+      EmailVerificationToken.query()
+        .deleteById(this.id)
         .then(() => {
           logger.log({
             level: 'debug',
             message: `Deleted emailVerificationToken with ID ${this.id}.`,
           });
         });
-    },
-    timeTillDelete);
+    }, timeTillDelete);
   }
 
   // Automatically handle expiration after inserting...

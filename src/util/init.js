@@ -1,4 +1,3 @@
-
 const EmailVerificationToken = require('./../models/EmailVerificationToken');
 
 /**
@@ -6,10 +5,11 @@ const EmailVerificationToken = require('./../models/EmailVerificationToken');
  */
 const initialize = () => {
   // We need to clear up all expired tokens...
-  EmailVerificationToken.query().where({}).then((tokens) => {
-    tokens.map(t => t.autoExpire());
-  });
+  EmailVerificationToken.query()
+    .where({})
+    .then(tokens => {
+      tokens.map(t => t.autoExpire());
+    });
 };
-
 
 module.exports = initialize;

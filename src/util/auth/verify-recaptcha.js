@@ -7,14 +7,18 @@ module.exports = (code, callback) => {
     return callback(true);
   }
 
-  return request.post('https://www.google.com/recaptcha/api/siteverify', {
-    form: {
-      secret: recaptcha.secret,
-      response: code,
+  return request.post(
+    'https://www.google.com/recaptcha/api/siteverify',
+    {
+      form: {
+        secret: recaptcha.secret,
+        response: code,
+      },
+      json: true,
     },
-    json: true,
-  }, (err, res, body) => {
-    if (err) return callback(false);
-    return callback(body.success);
-  });
+    (err, res, body) => {
+      if (err) return callback(false);
+      return callback(body.success);
+    }
+  );
 };
