@@ -18,7 +18,7 @@ module.exports = user =>
     .then(t => {
       if (t && Date.now() - t.created_at < delayTime * 1000) {
         const error = new Error(
-          'You have already requested an email verification' + ' recently.'
+          'You have already requested an email verification recently'
         );
         error.name = 'email-verification-too-quickly';
 
@@ -32,9 +32,7 @@ module.exports = user =>
           from: `Descartes <${config.email.smtp_user}>`,
           to: user.email,
           subject: 'Verify your Descartes account!',
-          html: `
-        Have fun, here is your code ${token}
-      `,
+          html: `Have fun, here is your code ${token}`,
         };
 
         emailer.sendMail(message).catch(err => {
