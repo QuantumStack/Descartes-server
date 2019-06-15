@@ -74,7 +74,7 @@ describe('POST /auth/resend', () => {
             })
             .end((err) => {
               if (err) return done(err);
-              EmailVerificationToken
+              return EmailVerificationToken
                 .query()
                 .select('*')
                 .then((results) => {
@@ -85,7 +85,7 @@ describe('POST /auth/resend', () => {
                   }
                 });
             });
-        }, config.email_verification_token.delay_time * 1000 + 500);
+        }, config.email_verification_token.delay_time * 1000);
       });
   }).timeout(config.email_verification_token.delay_time * 1000 + 2000);
 
@@ -104,7 +104,7 @@ describe('POST /auth/resend', () => {
                 done();
               }
             });
-        }, config.email_verification_token.expiry_time * 1000 + 500);
+        }, config.email_verification_token.expiry_time * 1000);
       });
   }).timeout(config.email_verification_token.expiry_time * 1000 + 2000);
 
