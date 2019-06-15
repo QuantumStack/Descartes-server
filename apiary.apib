@@ -33,6 +33,39 @@ Login to an existing user account. Note that the responses for an incorrect emai
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjI0LCJpYXQiOjE1NTg2MzI2NTN9.gpRK6QPQpPkHJ7iOjFuL7mvaghJFdQJNnCRuDimlaKM",
         }
 
+
++ Request 400 Email Not Provided (application/json)
+    + Body
+
+            {
+                "password": "example_password"
+            }
+            
++ Response 400 (application/json; charset=utf-8)
+
+        {
+            "success": false,
+            "error": "no-email",
+            "message": "Please provide an email address."
+        }
+        
+
++ Request 400 Password Not Provided (application/json)
+    + Body
+
+            {
+                "password": "example_password"
+            }
+            
++ Response 400 (application/json; charset=utf-8)
+
+        {
+            "success": false,
+            "error": "no-password",
+            "message": "Please provide a password."
+        }
+        
+
 + Request 400 Incorrect Email (application/json)
     + Body
 
@@ -726,4 +759,4 @@ Modify a user's name and/or password.
 
 + Response 200 (text/plain; charset=utf-8)
 
-        User details changed.
+        User details changed.n
