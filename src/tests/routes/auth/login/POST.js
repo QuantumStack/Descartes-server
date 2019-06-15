@@ -64,8 +64,7 @@ describe('POST /auth/login', () => {
         error: 'no-password',
         message: 'Please provide a password',
       }, done);
-  })
-
+  });
 
   it('400 Incorrect Email', (done) => {
     request(app)
