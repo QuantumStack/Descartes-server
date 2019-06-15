@@ -3,3 +3,4 @@ engines:
   duplication:
     exclude_paths:
       - src/routes/**/index.js
+      - src/tests/routes/**
