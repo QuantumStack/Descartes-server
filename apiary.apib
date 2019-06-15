@@ -268,6 +268,22 @@ Verify an email address given a confirmation code and email address. Note that t
             "error": "invalid-email-confirmation",
             "message": "Your email has not been verified."
         }
+        
++ Request 400 Email Already Verified (application/json)
+    + Body
+
+            {
+                "email": "aditya@example.com",
+                "confirmationId": "uK_5G4d84FyhASl.nwjbDdLryV8pTGFfDRBwA5re~VmFwGl_ePiT-Nc5YqCf5JPq"
+            }
+
++ Response 400 (application/json; charset=utf-8)
+
+        {
+          "success": false,
+          "error": "invalid-email-confirmation",
+          "message": "Your email has already been verified!',
+        }
 
 ### Resend Email Confirmation [POST /auth/resend]
 
@@ -316,7 +332,7 @@ Request to resend another email confirmation.
         {
             "success": false,
             "error": "email-already-verified",
-            "message": "This email has already been confirmed."
+            "message": "This email has already been verified."
         }
         
         
@@ -339,11 +355,38 @@ Request to resend another email confirmation.
 
 ## Course Collection [/api/course]
 
+### Check Coupon [GET /api/course/create/coupon{?code}]
+
+Determine if a coupon is valid and effect it has.
+
++ Request 200 Valid coupon (application/json)
+    + Headers
+        
+            Authentication: Bearer JWT
+
++ Response 200 (application/json; charset=utf-8)
+
+        {
+            "verified": true,
+            "price": 0
+        }
+        
++ Request 404 Invalid or expired coupon (application/json)
+    + Headers
+        
+            Authentication: Bearer JWT
+
++ Response 404 (application/json; charset=utf-8)
+
+        {
+            "verified": false
+        }
+
 ### Create Course [POST /api/course/create]
 
-Want to create a course. Redirect to Stripe for Checkout session.
+Want to create a course. Redirect to Stripe for Checkout session or includes `isFree: true` to skip checkout with Stripe.
 
-+ Request (application/json)
++ Request 200 Payment bypassed (application/json)
     + Headers
         
             Authentication: Bearer JWT
@@ -353,13 +396,37 @@ Want to create a course. Redirect to Stripe for Checkout session.
             {
                 "name": "15-122: Fall 2019",
                 "description": "**Very interesting and fun**",
-                "plan": "std || lit"
+                "plan": "std || lit",
+                "price": 25,
+                "coupon": "super secret 100% off"
             }
 
 + Response 200 (application/json; charset=utf-8)
 
         {
-            "id": "stripe checkout session id"
+            "isFree": true
+        }
+        
++ Request 200 Redirect to Stripe (application/json)
+    + Headers
+        
+            Authentication: Bearer JWT
+
+    + Body
+
+            {
+                "name": "15-122: Fall 2019",
+                "description": "**Very interesting and fun**",
+                "plan": "std || lit",
+                "price": 25,
+                "coupon": "super secret 100% off"
+            }
+
++ Response 200 (application/json; charset=utf-8)
+
+        {
+            "isFree": false,
+            "stripeId": "from Stripe server library"
         }
 
 ### Enroll In Course [POST /api/course/enroll]
@@ -400,10 +467,10 @@ Get details about a user's courses.
                     "id": "379",
                     "role": "admin",
                     "name": "15-112: Fall 2019",
-                    "instructors": 10,
-                    "students": 500,
-                    "activities": 5,
-                    "polls": 10,
+                    "numInstructors": 10,
+                    "numStudents": 500,
+                    "numActivities": 5,
+                    "numPolls": 10,
                     "oh": true,
                     "expired": false
                 }
@@ -411,21 +478,48 @@ Get details about a user's courses.
             "studentCourses": [
                 {
                     "id": "761",
-                    "role": "student",
                     "name": "15-122: Summer 2019",
                     "head": {
                         "email": "albert@smart.com",
-                        "name": "Albert Einstein",
-                        "role": "admin"
+                        "name": "Albert Einstein"
                     },
                     "grade": 100,
-                    "activities": 5,
-                    "polls": 10,
+                    "numActivities": 5,
+                    "numPolls": 10,
                     "oh": true,
                     "expired": false
                 }
             ]
         }
+        
+### Instructor Course Details [GET /api/course/instructor{?id}]
+
+Get all details about a course from an instructor's perspective.
+
++ Parameters
+    + id - course ID
+
++ Request (application/json)
+    + Headers
+    
+            Authentication: Bearer JWT
+    
++ Response 200 (application/json; charset=utf-8)
+
+        {
+            "course": {
+                "id": "379",
+                "role": "admin",
+                "name": "15-112: Fall 2019",
+                "numInstructors": 10,
+                "numStudents": 500,
+                "numActivities": 5,
+                "numPolls": 10,
+                "oh": true,
+                "expired": false
+            }
+        }
+        
 
 ### Student Course Details [GET /api/course/student{?id}]
 
@@ -449,7 +543,10 @@ Get all details about a course from a student's perspective. Notes:
                 "id": "761",
                 "name": "15-122: Fall 2019",
                 "description": "### Hello\n**Welcome** to this course!",
-                "head": "albert@smart.com",
+                "head": {
+                    "email": "albert@smart.com",
+                    "name": "Albert Einstein"
+                },
                 "contact": "teacher@course.com",
                 "instructors": [
                     {
@@ -468,9 +565,9 @@ Get all details about a course from a student's perspective. Notes:
                 "oh": true,
                 "expired": false,
                 "section": "A",
-                "override": 60,
-                "activities": 5,
-                "polls": 10,
+                "grade": 100,
+                "numActivities": 5,
+                "numPolls": 10,
                 "assignments": [
                     {
                         "id": "1",
@@ -596,7 +693,8 @@ Get just the details about a user.
             "user": {
                 "firstName": "Aditya",
                 "lastName": "Pillai",
-                "email": "aditya@example.com"
+                "email": "aditya@example.com",
+                "showEmail": true
             },
             "payments": [
                 {
