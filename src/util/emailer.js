@@ -1,7 +1,11 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const nodemailer = require('nodemailer');
 
 const logger = require('./logger');
-const { email } = require('../config');
+const { email } = require('./../config');
 
 // create nodemailer transport using settings from .env
 const transporter = nodemailer.createTransport({

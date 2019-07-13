@@ -1,11 +1,15 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const { describe } = require('mocha');
 
 const request = require('supertest');
-const app = require('../../../../app');
+const app = require('./../../../../app');
 const User = require('./../../../../models/User');
 
-require('./../../GET');
-require('./../signup/POST');
+require('./../../get.test');
+require('./../signup/post.test');
 
 const POST_LOGIN_URL = '/auth/login';
 

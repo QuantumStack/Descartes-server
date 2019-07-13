@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const PassportLocalStrategy = require('passport-local').Strategy;
 
 const bcrypt = require('bcryptjs');

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const logger = require('./../util/logger');
 const config = require('./../config');
 

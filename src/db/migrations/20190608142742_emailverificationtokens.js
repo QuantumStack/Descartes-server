@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 exports.up = knex =>
   knex.schema.createTable('email_verification_tokens', table => {
     table.increments('id');

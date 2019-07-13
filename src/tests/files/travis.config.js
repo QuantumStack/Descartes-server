@@ -1,14 +1,20 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
+require('dotenv').config();
+
 const config = {
   // Application Settings
   app: {
-    node_env: 'test',
-    port: 3000,
-    client_url: 'http://localhost:3000',
+    node_env: process.env.NODE_ENV || 'dev',
+    port: process.env.PORT || 3000,
+    client_url: process.env.CLIENT_URL || 'http://localhost:3000',
   },
 
   // Authentication Settings, keep care of this.
   auth: {
-    secret: 'secret_goes_here',
+    secret: process.env.SECRET || 'secret_goes_here',
     salt_rounds: 12,
   },
 
@@ -22,26 +28,28 @@ const config = {
       pass: null,
     },
     production: {
-      host: 'localhost',
-      port: 5432,
-      name: 'descartes',
-      user: 'adityapillai',
-      pass: null,
+      host: process.env.DB_HOST || 'localhost',
+      port: process.env.DB_PORT || 5432,
+      name: process.env.DB_NAME || 'descartes',
+      user: process.env.DB_USER || 'adityapillai',
+      pass: process.env.DB_PASS || null,
     },
   },
 
   // Recaptcha Settings
   recaptcha: {
-    secret: '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
-    enabled: true,
+    secret:
+      process.env.RECAPTCHA_SECRET ||
+      '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
+    enabled: process.env.RECAPTCHA_ENABLED || true,
   },
 
   // Emailing Settings
   email: {
-    smtp_server: 'smtp.mailgun.org',
-    smtp_port: '587',
-    smtp_user: 'bad@mail.example.com',
-    smtp_password: 'badpassword',
+    smtp_server: process.env.SMTP_SERVER || 'smtp.mailgun.org',
+    smtp_port: process.env.SMTP_PORT || '587',
+    smtp_user: process.env.SMTP_USER || 'bad@mail.example.com',
+    smtp_password: process.env.SMTP_PASSWORD || 'badpassword',
   },
 
   // Verification Token Settings
@@ -52,17 +60,19 @@ const config = {
 
   // Stripe settings
   stripe: {
-    secret_key: '',
-    public_key: '',
+    secret_key: process.env.STRIPE_SECRET_KEY || '',
+    public_key: process.env.STRIPE_PUBLIC_KEY || '',
   },
 
   // Plans settings
   plans: {
-    std: {
+    0: {
+      name: 'standard',
       price: 60,
       expDays: 185,
     },
-    lit: {
+    1: {
+      name: 'lite',
       price: 15,
       expDays: 185,
     },

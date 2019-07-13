@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 exports.up = knex =>
   knex.schema.createTable('students_courses', table => {
     table.bigIncrements('id');

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const express = require('express');
 const passport = require('passport');
 
@@ -5,6 +9,7 @@ const router = express.Router();
 
 const authRouter = require('./auth');
 const apiRouter = require('./api');
+const openRouter = require('./open');
 
 /* GET home page. */
 router.get('/', (req, res) =>
@@ -18,6 +23,7 @@ router.get('/', (req, res) =>
 );
 
 router.use('/auth', authRouter);
+router.use('/open', openRouter);
 router.use(
   '/api',
   passport.authenticate('jwt', {

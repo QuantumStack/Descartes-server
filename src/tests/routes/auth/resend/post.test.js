@@ -1,14 +1,18 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const { describe } = require('mocha');
 
 const request = require('supertest');
-const app = require('../../../../app');
+const app = require('./../../../../app');
 
-const config = require('../../../../config');
-const EmailVerificationToken = require('../../../../models/EmailVerificationToken');
-const User = require('../../../../models/User');
+const config = require('./../../../../config');
+const EmailVerificationToken = require('./../../../../models/EmailVerificationToken');
+const User = require('./../../../../models/User');
 
-require('./../../GET');
-require('./../login/POST');
+require('./../../get.test');
+require('./../login/post.test');
 
 const POST_RESEND_URL = '/auth/resend';
 

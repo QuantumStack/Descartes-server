@@ -1,8 +1,12 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const PassportLocalStrategy = require('passport-local').Strategy;
 
 const bcrypt = require('bcryptjs');
 
-const User = require('../../models/User');
+const User = require('./../../models/User');
 
 /**
  * Return the Passport Local Strategy object.

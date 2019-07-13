@@ -1,22 +1,24 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const { describe } = require('mocha');
 
 const request = require('supertest');
-const app = require('../../../../app');
-const knex = require('../../../helpers/knex');
+const app = require('./../../../../app');
+const knex = require('./../../../helpers/knex');
 
-require('./../../GET');
+require('./../../get.test');
 
 const POST_SIGNUP_URL = '/auth/signup';
 
 describe('POST /auth/signup', () => {
-  before(done => {
+  before(() =>
     knex.migrate
       .rollback()
       .then(() => knex.migrate.latest())
-      .then(() => {
-        done();
-      });
-  });
+      .then(() => knex.seed.run())
+  );
 
   it('200 Valid Signup (with reCAPTCHA)', done => {
     request(app)

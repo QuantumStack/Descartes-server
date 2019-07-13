@@ -6,6 +6,8 @@ Express RESTful backend for Descartes.
   made with ❤️ in Pittsburgh, PA by <a href="https://quantumstack.xyz">QuantumStack</a>
 </sup></div>
 
+Copyright (c) 2019, QuantumStack. All rights reserved.
+
 ## Testing
 
 | Branch   | Test Cases                                                                                                                                    | Coverage                                                                                                                                                                               |

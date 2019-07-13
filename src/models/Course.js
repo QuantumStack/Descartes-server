@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const { Model } = require('objection');
 /* eslint-disable global-require */
 
@@ -10,6 +14,7 @@ class Course extends Model {
   // Define relations
   static get relationMappings() {
     const Profile = require('./Profile');
+    const CoursePlan = require('./CoursePlan');
 
     return {
       // The owner of the course (the one that created it)
@@ -47,6 +52,15 @@ class Course extends Model {
             to: 'instructors_courses.student_id',
           },
           to: 'profiles.user_id',
+        },
+      },
+
+      plan: {
+        relation: this.BelongsToOneRelation,
+        modelClass: CoursePlan,
+        join: {
+          from: 'courses.plan_id',
+          to: 'course_plans.uuid',
         },
       },
     };

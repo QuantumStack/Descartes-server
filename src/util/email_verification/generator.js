@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const crypto = require('crypto-random-string');
 
 const EmailVerificationToken = require('./../../models/EmailVerificationToken');

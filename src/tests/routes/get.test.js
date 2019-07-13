@@ -1,13 +1,22 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const { describe } = require('mocha');
 
 const request = require('supertest');
-const app = require('../../app');
+const app = require('./../../app');
 
 const knex = require('./../helpers/knex');
 
 // Health Check for server before other tests commence.
 describe('GET /', () => {
-  before(() => knex.migrate.rollback().then(() => knex.migrate.latest()));
+  before(() =>
+    knex.migrate
+      .rollback()
+      .then(() => knex.migrate.latest())
+      .then(() => knex.seed.run())
+  );
 
   it('Test Health of API Server', done => {
     request(app)

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const EmailVerificationToken = require('./../models/EmailVerificationToken');
 
 /**

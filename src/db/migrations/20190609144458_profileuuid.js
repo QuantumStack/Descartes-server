@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 exports.up = knex =>
   knex.schema.table('profiles', table => {
     table.uuid('uuid').defaultTo(knex.raw('uuid_generate_v4()'));

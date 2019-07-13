@@ -1,8 +1,15 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const express = require('express');
 
 const config = require('./../../../../config');
 
 const InstructorCourse = require('./../../../../models/InstructorCourse');
+const CoursePlan = require('./../../../../models/CoursePlan');
+
+const stripe = require('stripe')(config.stripe.secret_key);
 
 const router = express.Router();
 
@@ -10,10 +17,10 @@ const router = express.Router();
  *
  *  Creates a course using a user account and course information.
  */
-const createCourse = (user, name, description, planId) => {
+const createCourse = (user, name, description, coursePlan) => {
   // Calculate the expiration time.
   const expiryDate = new Date();
-  expiryDate.setDate(expiryDate.getDate() + config.plans.planId.expDays);
+  expiryDate.setDate(expiryDate.getDate() + coursePlan.length_in_days);
 
   return (
     user
@@ -21,16 +28,14 @@ const createCourse = (user, name, description, planId) => {
       // Get the user's profile
       .then(profile =>
         profile
-          // With that profile, we will add a course for which they are the onwer
+          // With that profile, we will add a course for which they are the owner
           .$relatedQuery('ownerCourses')
           .insert({
             name,
             description,
-            plan_id: planId,
+            plan_uuid: coursePlan.uuid,
             expires_at: expiryDate,
           })
-          // After that course is created, we need to add them to the list of
-          // instructors for that course with admin access.
           .then(course =>
             profile
               .$relatedQuery('instructorCourses')
@@ -52,17 +57,20 @@ const createCourse = (user, name, description, planId) => {
   );
 };
 
+// Export this function for other parts of the program to use.
+exports.createCourse = createCourse;
+
 /** POST /api/course/create
  *
  * Creating a course, redirect to stripe.
  */
 router.post('/', (req, res) => {
-  const { name, description, plan } = req.body;
+  const { name, description, plan, price, coupon } = req.body;
 
   if (!name || name.trim().length === 0) {
     return res.status(400).json({
       success: false,
-      error: 'no-name',
+      error: 'no-course-name',
       message: 'Please provide a course name.',
     });
   }
@@ -75,7 +83,7 @@ router.post('/', (req, res) => {
     });
   }
 
-  if (!plan || !(plan in config.plans)) {
+  if (plan === null) {
     return res.status(400).json({
       success: false,
       error: 'no-plan',
@@ -83,23 +91,39 @@ router.post('/', (req, res) => {
     });
   }
 
-  // Handle the case where the user that is creating a course is an
-  // administrator.
-  if (req.user.is_admin) {
-    return createCourse(req.user, name, description, plan).then(course =>
-      res.status(200).json({
-        success: true,
-        isAdmin: true,
-        courseId: course.uuid,
-      })
-    );
-  }
+  return CoursePlan.query()
+    .where('uuid', plan)
+    .first()
+    .then(coursePlan => {
+      if (!coursePlan) {
+        return res.status(400).json({
+          success: false,
+          error: 'invalid-plan',
+          message: 'Please select a valid course plan.',
+        });
+      }
+      // Handle the case where the user that is creating a course is an
+      // administrator.
+      if (req.user.is_admin) {
+        return createCourse(req.user, name, description, coursePlan).then(
+          course =>
+            res.status(200).json({
+              success: true,
+              isFree: true,
+              courseId: course.uuid,
+            })
+        );
+      }
 
-  return res.status(400).json({
-    success: false,
-    error: 'not-implemented',
-    message: 'Hold tight while we implement this feature.',
-  });
+      // Coupon logic
+
+      // Handle coupon logic
+      return res.status(400).json({
+        success: false,
+        error: 'not-implemented',
+        message: 'Hold tight while we implement this feature.',
+      });
+    });
 });
 
 module.exports = router;

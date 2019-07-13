@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const jwt = require('jsonwebtoken');
 
 const User = require('./../../models/User');

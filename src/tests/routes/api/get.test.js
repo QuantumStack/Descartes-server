@@ -1,13 +1,17 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const { describe } = require('mocha');
 
 const request = require('supertest');
-const app = require('../../../app');
+const app = require('./../../../app');
 
 const getJWT = require('./../../helpers/getJWT');
 
-require('./../GET');
-require('./../auth/signup/POST');
-require('./../auth/login/POST');
+require('./../get.test');
+require('./../auth/signup/post.test');
+require('./../auth/login/post.test');
 
 const GET_API_URL = '/api';
 
@@ -24,7 +28,7 @@ describe('GET /api/', () => {
   it('200 Authentication Verified', done => {
     request(app)
       .get(GET_API_URL)
-      .set('Authorization', `Bearer ${jwt}`)
+      .set('Authorization', `bearer ${jwt}`)
       .expect('Content-Type', /json/)
       .expect(
         200,

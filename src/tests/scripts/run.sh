@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# COPYRIGHT (c) 2019, QUANTUMSTACK. ALL RIGHTS RESERVED.
+
 # Exit with failure code on error.
 set -e
 

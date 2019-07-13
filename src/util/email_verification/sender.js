@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const EmailVerificationToken = require('./../../models/EmailVerificationToken');
 const emailer = require('./../emailer');
 
@@ -25,8 +29,8 @@ module.exports = user =>
         return error;
       }
 
-      // Since they haven't requested a email verification for a while, let's give
-      // it to them.
+      // Since they haven't requested a email verification for a while, let's
+      // give it to them.
       return tokenGenerator(user).then(token => {
         const message = {
           from: `Descartes <${config.email.smtp_user}>`,

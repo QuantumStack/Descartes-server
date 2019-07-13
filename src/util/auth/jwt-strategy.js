@@ -1,9 +1,13 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 const PassportJwtStrategy = require('passport-jwt').Strategy;
 const PassportExtractJwt = require('passport-jwt').ExtractJwt;
 
 const config = require('./../../config');
 
-const User = require('../../models/User');
+const User = require('./../../models/User');
 
 const opts = {
   jwtFromRequest: PassportExtractJwt.fromAuthHeaderWithScheme('bearer'),

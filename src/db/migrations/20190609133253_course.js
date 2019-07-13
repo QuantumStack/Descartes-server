@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019, QuantumStack. All rights reserved.
+ */
+
 exports.up = knex =>
   knex.schema
     .raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"')
@@ -15,7 +19,6 @@ exports.up = knex =>
       // Other information
       table.string('name').notNullable();
       table.string('description');
-      table.string('plan_id').notNullable();
 
       // Date and time information
       table.dateTime('expires_at');
