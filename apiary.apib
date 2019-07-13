@@ -445,6 +445,15 @@ This collection is unauthenticated information that may be necessary to the clie
 + Response 200
 
         {
+            "success": true,
+            "coursePlans": [
+                {
+                    "uuid": "f0a00239-6c23-4052-9937-4ec22b467a00",
+                    "plan_name": "standard",
+                    "price": "200",
+                    "length_in_days": 185
+                }
+            ]
         }
 
 
@@ -507,8 +516,8 @@ Determine if a coupon is valid and effect it has.
         {
             "success": true,
             "verified": true,
-            "plan": "std",
-            "price": 0
+            "plan": "standard",
+            "adjustedPrice": 0
         }
         
 + Request 400 Coupon Not Provided (application/json)
@@ -532,7 +541,7 @@ Determine if a coupon is valid and effect it has.
 + Response 404 (application/json; charset=utf-8)
 
         {
-            "success": true,
+            "success": false,
             "verified": false
         }
 
@@ -540,7 +549,7 @@ Determine if a coupon is valid and effect it has.
 
 Redirect to Stripe for Checkout session or includes `isFree: true` to skip checkout with Stripe.
 
-+ Request 200 Payment Portal Skipped (application/json)
++ Request 200 Payment Portal Skipped with Coupon Code (application/json)
     + Headers
         
             Authorization: bearer JWT
@@ -553,6 +562,27 @@ Redirect to Stripe for Checkout session or includes `isFree: true` to skip check
                 "plan": 0,
                 "price": 200,
                 "coupon": "discount_code"
+            }
+
++ Response 200 (application/json; charset=utf-8)
+
+        {
+            "success": true,
+            "isFree": true
+        }
+        
++ Request 200 Payment Portal Skipped as Administrator (application/json)
+    + Headers
+        
+            Authorization: bearer JWT
+
+    + Body
+
+            {
+                "name": "15-122: Principles of Imperative Computation - Fall 2019",
+                "description": "An introduction to imperative programming.",
+                "plan": 0,
+                "price": 200
             }
 
 + Response 200 (application/json; charset=utf-8)
@@ -660,6 +690,15 @@ Redirect to Stripe for Checkout session or includes `isFree: true` to skip check
                 "price": 200,
                 "plan": -15,
             }
+            
++ Response 400 (application/json; charset=utf-8)
+
+        {
+            "success": false,
+            "error": "invalid-plan",
+            "message": "Please select a valid course plan.",
+        }
+        
 
 + Request 400 Invalid or Expired Coupon Code (application/json)
     + Headers
