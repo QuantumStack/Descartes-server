@@ -536,12 +536,13 @@ Determine if a coupon is valid and effect it has.
 + Request 404 Invalid or Expired Coupon Code (application/json)
     + Headers
         
-            Authorization: bearer JWT
+            Authorization: bearer JWTo
+            
 
 + Response 404 (application/json; charset=utf-8)
 
         {
-            "success": false,
+            "success": true,
             "verified": false
         }
 
